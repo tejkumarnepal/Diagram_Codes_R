@@ -1,0 +1,26 @@
+library(tidyverse)
+
+set.seed(1235)
+
+data <- data.frame(
+  threats = c("Influence of foreign market", "Change in religion", "Loss of local language",
+              "Foreign culture", "Education", "Migration", "Social conflict", "Policies"),
+  count = c(31, 17, 32, 40, 15, 27, 8, 10)
+)
+
+plot <- ggplot(data, aes(x = as.factor(threats), y = count, fill = threats)) +
+  geom_bar(stat = "identity") +
+  ylim(-50, 50) +
+  theme_minimal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        plot.margin = unit(rep(0, 4), "cm")) +
+  coord_polar(start = 0) +
+  geom_text(aes(label = count), position = position_stack(vjust = 0.5)) +
+  labs(fill = "Threats", x = NULL, y = NULL) +
+  guides(fill = guide_legend(title = "Threats")) +
+  scale_fill_manual(values = c("red", "pink", "blue", "green",
+                               "yellow", "cyan", "purple", "orange")) +
+  theme(legend.position = "right")
+
+ggsave("figure5.png", plot, dpi = 300, bg="white")
