@@ -1,3 +1,4 @@
+install.packages("circlize)
 library(circlize)
 
 set.seed(2948)
@@ -19,6 +20,7 @@ chordDiagram(numbers, transparency = 0.1, grid.col = grid.colors)
 
 library(tidyverse)
 
+#to save the image
 png("chord_diagram.png", width = 3000, height = 3000, res = 500)
 circos.clear()
 chordDiagram(numbers, transparency = 0.1, grid.col = grid.colors)
