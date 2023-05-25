@@ -1,0 +1,30 @@
+---
+title: "Chord Plot"
+author: "Tej Kumar Nepal"
+date: "2023-05-25"
+output: pdf_document
+---
+
+```{r}
+library(circlize)
+
+age <- c("< 30", "31 - 40", "41 - 50", "51 - 60", "> 60")
+no_of_species <- c(21, 43, 55, 70, 85)
+male <- c(12, 29, 53, 56, 75)
+female <- c(18, 36, 45, 65, 77)
+
+numbers <- matrix(c(no_of_species, male, female), ncol = 3, byrow = TRUE)
+
+rownames(numbers) <- age
+colnames(numbers) <- c("No. of species reported", "Male", "Female")
+
+grid.colors <- c("No. of species reported" = "red", Male = "green", Female = "blue")
+
+chordDiagram(numbers, transparency = 0.1, grid.col = grid.colors)
+```
+```{r to save the file}
+png("new.png", width = 3000, height = 3000, res = 500)
+chordDiagram(numbers, transparency = 0.1, grid.col = grid.colors)
+dev.off()
+```
+
