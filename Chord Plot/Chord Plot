@@ -25,3 +25,30 @@ png("chord_diagram.png", width = 3000, height = 3000, res = 500)
 circos.clear()
 chordDiagram(numbers, transparency = 0.1, grid.col = grid.colors)
 dev.off()
+
+
+
+
+#TO generate a chord plot with 71 species name and IUCN Categories
+# Define the botanical names and habits
+botanical_names <- c("Acorus calamus", "Nardostachys grandiflora", "Ageratum conyzoides", "Artemisia indica", "Eupatorium adenophorum", "Fagopyrum dibotrys", "Cyathocline purpurea", "Bidens pilosa", "Astilbe rivularis", "Bauhinia vahlii", "Cardamine hirsuta", "Schima wallichii", "Ocimum tenuiflorum", "Aloe vera", "Cannabis sativa", "Drymaria diandra", "Rubia manjith", "Swertia chirata", "Abrus precatorius", "Rubia cordifolia", "Garcinia cowa", "Ficus benjamina", "Ficus religiosa", "Ficus benghalensis", "Ficus auriculata", "Ficus semicordata", "Artocarpus heterophyllus", "Morus australis", "Osbeckia crinita", "Nephrolepis tuberosa", "Colocasia esculenta", "Diplazium esculentum", "Bergenia ciliata", "Curcuma longa", "Zanthoxylum armatum", "Piper mullesua", "Girardinia diversifolia", "Elatostema lineolatum", "Rubus ellipticus", "Prunus persica", "Oroxylum indicum", "Phytolacca acinosa", "Lindernia anagallis", "Lobelia nummularia", "Mangifera indica", "Phyllanthus emblica", "Euphorbia hirta", "Piper longum", "Ziziphus mauritiana", "Momordica charantia", "Dioscorea bulbifera", "Entada pursaetha", "Tamarindus indica", "Juglans regia", "Moringa oleifera", "Picrorhiza kurroa", "Cynodon dactylon", "Punica granatum", "Amomum subulatum", "Alnus nepalensis", "Zingiber officinate", "Senna tora", "Selaginella delicatula", "Choerospondias axillaris", "Rhus chinensis", "Aquilaria malaccensis", "Cinnamomum tamala", "Bauhinia variegata", "Mentha spicata", "Oxalis corniculata", "Rumex nepalensis")
+status <- c("Least Concern", "Critically Endangered", "Least Concern", "Least Concern", "Least Concern", "Least Concern", "Least Concern", "Not Evaluated", "Not Evaluated", "Not Evaluated", "Not Evaluated", "Least Concern", "Least Concern", "Not Evaluated", "Not Evaluated", "Not Evaluated", "Not Evaluated", "Critically Endangered", "Not Evaluated", "Not Evaluated", "Not Evaluated", "Least Concern", "Not Evaluated", "Not Evaluated", "Least Concern", "Least Concern", "Not Evaluated", "Not Evaluated", "Data Deficient", "Not Evaluated", "Not Evaluated", "Not Evaluated", "Least Concern", "Data Deficient", "Least Concern", "Not Evaluated", "Not Evaluated", "Not Evaluated", "Least Concern", "Data Deficient", "Not Evaluated", "Not Evaluated", "Least Concern", "Not Evaluated", "Least Concern", "Least Concern", "Not Evaluated", "Not Evaluated", "Least Concern", "Not Evaluated", "Not Evaluated", "Data Deficient", "Not Evaluated", "Not Evaluated", "Least Concern", "Endangered", "Not Evaluated", "Least Concern", "Data Deficient", "Not Evaluated", "Data Deficient", "Not Evaluated", "Not Evaluated", "Least Concern", "Least Concern", "Critically Endangered", "Not Evaluated", "Least Concern", "Least Concern", "Not Evaluated", "Not Evaluated")
+
+data <- data.frame(BotanicalName = botanical_names, Status = status)
+
+data$Status <- factor(data$Status, levels = unique(data$Status))
+
+chordDiagram(data, annotationTrack = "grid", preAllocateTracks = 1)
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5), cex = 0.6) # Adjust the font size with the 'cex' parameter
+  circos.axis(h = "top", labels.cex = 0.5, major.tick.length = 0.2, sector.index = sector.name, track.index = 2)
+}, bg.border = NA)
+
+#to save the image
+png("Habit class.png", width = 3000, height = 3000, res = 500)
+circos.clear()
+chordDiagram(data, transparency = 0.1)
+dev.off()
