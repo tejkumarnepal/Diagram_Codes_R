@@ -1,0 +1,21 @@
+library(circlize)
+# Define the botanical names and habits
+botanical_names <- c("Acorus calamus", "Nardostachys grandiflora", "Ageratum conyzoides", "Artemisia indica", "Eupatorium adenophorum", "Fagopyrum dibotrys", "Cyathocline purpurea", "Bidens pilosa", "Astilbe rivularis", "Bauhinia vahlii", "Cardamine hirsuta", "Schima wallichii", "Ocimum tenuiflorum", "Aloe vera", "Cannabis sativa", "Drymaria diandra", "Rubia manjith", "Swertia chirata", "Abrus precatorius", "Rubia cordifolia", "Garcinia cowa", "Ficus benjamina", "Ficus religiosa", "Ficus benghalensis", "Ficus auriculata", "Ficus semicordata", "Artocarpus heterophyllus", "Morus australis", "Osbeckia crinita", "Nephrolepis tuberosa", "Colocasia esculenta", "Diplazium esculentum", "Bergenia ciliata", "Curcuma longa", "Zanthoxylum armatum", "Piper mullesua", "Girardinia diversifolia", "Elatostema lineolatum", "Rubus ellipticus", "Prunus persica", "Oroxylum indicum", "Phytolacca acinosa", "Lindernia anagallis", "Lobelia nummularia", "Mangifera indica", "Phyllanthus emblica", "Euphorbia hirta", "Piper longum", "Ziziphus mauritiana", "Momordica charantia", "Dioscorea bulbifera", "Entada pursaetha", "Tamarindus indica", "Juglans regia", "Moringa oleifera", "Picrorhiza kurroa", "Cynodon dactylon", "Punica granatum", "Amomum subulatum", "Alnus nepalensis", "Zingiber officinate", "Senna tora", "Selaginella delicatula", "Choerospondias axillaris", "Rhus chinensis", "Aquilaria malaccensis", "Cinnamomum tamala", "Bauhinia variegata", "Mentha spicata", "Oxalis corniculata", "Rumex nepalensis")
+habit <- c("Herb", "Herb", "Herb", "Shrub", "Shrub", "Herb", "Herb", "Herb", "Herb", "Climber", "Herb", "Tree", "Herb", "Herb", "Herb", "Herb", "Climber", "Herb", "Herb", "Climber", "Tree", "Tree", "Tree", "Tree", "Tree", "Tree", "Tree", "Shrub", "Shrub", "Herb", "Herb", "Herb", "Herb", "Herb", "Herb", "Climber", "Herb", "Herb", "Shrub", "Tree", "Tree", "Herb", "Herb", "Herb", "Tree", "Tree", "Herb", "Herb", "Shrub", "Climber", "Climber", "Climber", "Tree", "Tree", "Tree", "Herb", "Herb", "Tree", "Herb", "Tree", "Herb", "Herb", "Herb", "Tree", "Tree", "Tree", "Tree", "Tree", "Herb", "Herb", "Herb")
+
+library(ggplot2)
+
+# Create a table of botanical names and habit categories
+data_table <- table(habit, botanical_names)
+
+# Create the chord diagram
+chordDiagram(data_table)
+
+chordDiagram(data_table, annotationTrack = "grid", preAllocateTracks = 1)
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5), cex = 0.6) # Adjust the font size with the 'cex' parameter
+  circos.axis(h = "top", labels.cex = 0.5, major.tick.length = 0.2, sector.index = sector.name, track.index = 2)
+}, bg.border = NA)
