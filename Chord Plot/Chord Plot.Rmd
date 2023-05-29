@@ -52,3 +52,32 @@ circos.clear()
 chordDiagram(data, transparency = 0.1)
 dev.off()
 ```
+
+{r to create a chord diagram with Species names and with its multiple parts used}
+library(circlize)
+# Define the botanical names and habits
+botanical_names <- c("Acorus calamus", "Nardostachys grandiflora", "Ageratum conyzoides", "Artemisia indica", "Eupatorium adenophorum", "Fagopyrum dibotrys", "Cyathocline purpurea", "Bidens pilosa", "Astilbe rivularis", "Bauhinia vahlii", "Cardamine hirsuta", "Schima wallichii", "Ocimum tenuiflorum", "Aloe vera", "Cannabis sativa", "Drymaria diandra", "Rubia manjith", "Swertia chirata", "Abrus precatorius", "Rubia cordifolia", "Garcinia cowa", "Ficus benjamina", "Ficus religiosa", "Ficus benghalensis", "Ficus auriculata", "Ficus semicordata", "Artocarpus heterophyllus", "Morus australis", "Osbeckia crinita", "Nephrolepis tuberosa", "Colocasia esculenta", "Diplazium esculentum", "Bergenia ciliata", "Curcuma longa", "Zanthoxylum armatum", "Piper mullesua", "Girardinia diversifolia", "Elatostema lineolatum", "Rubus ellipticus", "Prunus persica", "Oroxylum indicum", "Phytolacca acinosa", "Lindernia anagallis", "Lobelia nummularia", "Mangifera indica", "Phyllanthus emblica", "Euphorbia hirta", "Piper longum", "Ziziphus mauritiana", "Momordica charantia", "Dioscorea bulbifera", "Entada pursaetha", "Tamarindus indica", "Juglans regia", "Moringa oleifera", "Picrorhiza kurroa", "Cynodon dactylon", "Punica granatum", "Amomum subulatum", "Alnus nepalensis", "Zingiber officinate", "Senna tora", "Selaginella delicatula", "Choerospondias axillaris", "Rhus chinensis", "Aquilaria malaccensis", "Cinnamomum tamala", "Bauhinia variegata", "Mentha spicata", "Oxalis corniculata", "Rumex nepalensis")
+uses <- c("Rhizome", "Roots", "Leaves", "Leaves", "Leaves", "Grains, Young shoot", "Roots, Leaves, Stem", "Whole plant", "Roots, Leaves", "Seeds, Leaves", "Young shoot", "Bark", "Whole plant", "Whole plant", "Seeds", "Young shoot", "Fruits, Roots, Stem", "Young shoot", "Seeds", "Roots", "Roots, Fruits", "Rhizome", "Fruits, Leaves, Bark", "Bark, Roots", "Roots, Fruits", "Bark, Roots", "Rhizome", "Bark, Leaves, Seeds", "Roots, Leaves", "Roots", "Roots", "Fronds", "Roots", "Rhizome", "Seeds", "Fruits", "Roots, Leaves, Whole plant", "Whole plant", "Whole plant", "Fruits, Seeds, Flowers", "Flowers, Leaves", "Leaves, Stem", "Leaves", "Leaves, Fruits", "Bark", "Fruits, Leaves", "Roots", "Fruits", "Bark, Stem", "Fruits, Leaves", "Whole plant", "Bark, Seeds", "Bark, Fruits, Seeds", "Fruits, Seeds", "Leaves, Flowers, Fruits", "Roots", "Roots, Leaves", "Fruits", "Seeds", "Leaves, Bark", "Rhizome", "Roots", "Leaves", "Fruits, Bark", "Fruits, Flowers", "Heartwood", "Leaves", "Leaves, Flowers, Young shoot", "Leaves", "Leaves", "Roots")
+
+# Separate multiple uses for each botanical name
+data <- data.frame(BotanicalName = botanical_names, Uses = uses)
+data <- separate_rows(data, Uses, sep = ", ")
+
+# Define a color palette for the 13 categories of uses
+use_colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#ff9896", "#9edae5", "#c5b0d5")
+
+# Assign colors to each unique use
+unique_uses <- unique(data$Uses)
+use_color_mapping <- setNames(use_colors[1:length(unique_uses)], unique_uses)
+data$UseColor <- use_color_mapping[data$Uses]
+
+# Plot the chord diagram with uniform colors for each use
+chordDiagram(data, annotationTrack = "grid", preAllocateTracks = 1, col = data$UseColor)
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5), cex = 0.6) # Adjust the font size with the 'cex' parameter
+  circos.axis(h = "top", labels.cex = 0.5, major.tick.length = 0.2, sector.index = sector.name, track.index = 2)
+}, bg.border = NA)
+```
